@@ -1,0 +1,31 @@
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+
+<mat-card multi="true" *ngFor="let post of posts">
+  <mat-card-title>
+    {{ post.creatorNickname }}
+  </mat-card-title>
+  <img mat-card-image [src]="post.imagePath" [alt]="post.title" />
+  <mat-card-content>
+    <p>
+      <span>{{ post.creatorNickname }}</span> {{ post.text }}
+    </p>
+  </mat-card-content>
+
+  <mat-action-row *ngIf="isAuthenticated && post.creatorId === userId">
+    <button mat-button color="accent" [routerLink]="['/edit', post.id]">
+      EDIT
+    </button>
+    <button mat-button color="warn" (click)="deletePost(post.id)">
+      DELETE
+    </button>
+  </mat-action-row>
+</mat-card>
+<mat-paginator
+  [length]="totalPosts"
+  [pageSize]="postsPerPage"
+  [pageSizeOptions]="pageSizeOptions"
+  (page)="onPageChanged($event)"
+></mat-paginator>
+<p *ngIf="!isLoading && posts.length <= 0" class="mat-body-1 info-text">
+  No posts
+</p>

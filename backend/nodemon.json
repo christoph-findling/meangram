@@ -1,0 +1,7 @@
+{
+    "verbose": true,
+    "env": {
+        "MONGO_ATLAS_KEY": "4laldfLD32",
+        "JWT_KEY": "secret_this_should_be_longer"
+    }
+}

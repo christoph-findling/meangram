@@ -1,0 +1,44 @@
+$fontSize: 14px;
+
+:host {
+  margin-top: 2rem;
+  display: block;
+}
+
+.info-text {
+  text-align: center;
+}
+
+mat-spinner {
+  margin: auto;
+}
+
+.post-image {
+  width: 100%;
+  img {
+    width: 100%;
+  }
+}
+
+mat-paginator {
+  // margin-top: 2rem;
+}
+
+mat-card {
+  margin-bottom: 2rem;
+}
+
+mat-card-title {
+  font-size: $fontSize;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+mat-card-content {
+  p {
+    font-size: $fontSize;
+  }
+  span {
+    font-weight: 600;
+  }
+}
