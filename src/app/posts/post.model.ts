@@ -4,12 +4,12 @@ export interface Post {
   imagePath: string;
   comments: Array<{
     text: string;
-    data: string;
+    date: string;
     creatorId: string;
     creatorName: string;
   }>;
   creatorName: string;
   creatorNickname: string;
   creatorId: string;
-  date: Date;
+  date: string;
 }

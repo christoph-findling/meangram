@@ -14,7 +14,7 @@ import { ErrorComponent } from './error/error.component';
 import { AngularMaterialModule } from './angular-material.module';
 import { PostModule } from './posts/post.module';
 import { ProfileComponent } from './user/profile/profile.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CanDeactivateGuard } from './auth/can-deactivate-guard.service';
 import { PostResolver } from './auth/post-resolver.service';
 import { AbbreviationPipe } from './pipes/abbreviation';
@@ -34,7 +34,8 @@ import { AbbreviationPipe } from './pipes/abbreviation';
     HttpClientModule,
     AngularMaterialModule,
     ReactiveFormsModule,
-    PostModule
+    PostModule,
+    FormsModule
   ],
   providers: [
     PostsService,

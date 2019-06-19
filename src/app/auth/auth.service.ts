@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 
 import { BehaviorSubject } from 'rxjs';
 
@@ -62,6 +62,7 @@ export class AuthService {
         userId: string;
         userName: string;
         userNickname: string;
+        userImage: string;
         email: string;
       }>(BACKEND_URL + 'login', authData)
       .subscribe(
@@ -72,6 +73,7 @@ export class AuthService {
               id: res.userId,
               name: res.userName,
               nickname: res.userNickname,
+              image: res.userImage,
               email: res.email
             };
             // this.userId = res.userId;
@@ -87,6 +89,7 @@ export class AuthService {
               res.userId,
               res.userName,
               res.userNickname,
+              res.userImage,
               res.email
             );
             this.isAuthenticated = true;
@@ -108,6 +111,10 @@ export class AuthService {
 
   getUserName(): string {
     return this.user.name;
+  }
+
+  getUserNickname(): string {
+    return this.user.nickname;
   }
 
   getUser(): User {
@@ -153,6 +160,7 @@ export class AuthService {
           id: authData.userId,
           name: authData.userName,
           nickname: authData.userNickname,
+          image: authData.userImage,
           email: authData.email
         };
         // this.userId = authData.userId;
@@ -169,6 +177,7 @@ export class AuthService {
     userId: string,
     userName: string,
     userNickname: string,
+    userImage: string,
     email: string
   ) {
     localStorage.setItem('token', token);
@@ -176,6 +185,7 @@ export class AuthService {
     localStorage.setItem('userId', userId);
     localStorage.setItem('userName', userName);
     localStorage.setItem('userNickname', userNickname);
+    localStorage.setItem('userImage', userImage);
     localStorage.setItem('email', email);
   }
 
@@ -185,6 +195,7 @@ export class AuthService {
     localStorage.removeItem('userId');
     localStorage.removeItem('userName');
     localStorage.removeItem('userNickname');
+    localStorage.removeItem('userImage');
     localStorage.removeItem('email');
   }
 
@@ -194,6 +205,7 @@ export class AuthService {
     userId: string;
     userName: string;
     userNickname: string;
+    userImage: string;
     email: string;
   } {
     const token = localStorage.getItem('token');
@@ -202,6 +214,7 @@ export class AuthService {
     const userName = localStorage.getItem('userName');
     const userNickname = localStorage.getItem('userNickname');
     const email = localStorage.getItem('email');
+    const userImage = localStorage.getItem('userImage');
     if (!token || !expirationDate) {
       return;
     } else {
@@ -211,8 +224,26 @@ export class AuthService {
         userId,
         userName,
         userNickname,
+        userImage,
         email
       };
     }
+  }
+
+  updateUser(userName: string, userEmail: string, userImage: File) {
+    const postData = new FormData();
+    postData.append('name', userName);
+    postData.append('email', userEmail);
+    postData.append('image', userImage);
+    console.log(postData);
+    this.http
+      .put(BACKEND_URL + 'update', postData)
+      .subscribe((res: { message: string; imagePath: string }) => {
+        if (res.imagePath.length > 0) {
+          localStorage.removeItem('userImage');
+          localStorage.setItem('userImage', res.imagePath);
+          this.user.image = res.imagePath;
+        }
+      });
   }
 }

@@ -42,3 +42,32 @@ mat-card-content {
     font-weight: 600;
   }
 }
+
+.time-ago {
+  float: right;
+}
+
+mat-card-footer {
+  border-top: 1px solid #efefef;
+  display: flex;
+  flex-direction: row;
+}
+
+.comment-input {
+  padding: 1rem;
+  flex-grow: 1;
+  display: flex;
+}
+
+.post-comment-button {
+  background-color: transparent;
+  color: #3897f0;
+  border: none;
+  font-weight: 600;
+}
+
+mat-card-actions {
+  border-top: 1px solid #efefef;
+  width: 100%;
+  margin-bottom: 0;
+}

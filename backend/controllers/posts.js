@@ -93,16 +93,48 @@ exports.updatePost = (req, res, next) => {
   //     content: req.body.content,
   //     imagePath: imagePath
   //   });
-  Post.updateOne(
-    { _id: req.params.id, creatorId: req.userData.userId },
-    { $set: { text: req.body.text, imagePath: imagePath } }
-  ).then(result => {
-    console.log(result);
-    if (result.n > 0) {
-      res.status(200).json({ message: "update successfull" });
-    } else {
-      res.status(401).json({ message: "not authorized" });
-    }
-    console.log(result);
-  });
+  if (req.body.comment) {
+    Post.updateOne(
+      { _id: req.params.id },
+      {
+        $push: {
+          comments: {
+            creatorId: req.userData.userId,
+            creatorNickname: req.userData.userNickname,
+            date: Date(),
+            text: req.body.comment
+          }
+        }
+      }
+    ).then(result => {
+      console.log(result);
+      if (result.n > 0) {
+        res.status(200).json({
+          message: "comment added successfully",
+          comment: {
+            creatorId: req.userData.userId,
+            creatorNickname: req.userData.userNickname,
+            date: Date(),
+            text: req.body.comment
+          }
+        });
+      } else {
+        res.status(401).json({ message: "not authorized" });
+      }
+      console.log(result);
+    });
+  } else {
+    Post.updateOne(
+      { _id: req.params.id, creatorId: req.userData.userId },
+      { $set: { text: req.body.text, imagePath: imagePath } }
+    ).then(result => {
+      console.log(result);
+      if (result.n > 0) {
+        res.status(200).json({ message: "update successfull" });
+      } else {
+        res.status(401).json({ message: "not authorized" });
+      }
+      console.log(result);
+    });
+  }
 };

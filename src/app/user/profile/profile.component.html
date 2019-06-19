@@ -2,29 +2,55 @@
   <mat-spinner *ngIf="isLoading"></mat-spinner>
   <form [formGroup]="form" *ngIf="!isLoading" (submit)="saveProfile()">
     <mat-form-field>
-      <input id="name" matInput rows="4" formControlName="name" placeholder="Your username" />
-      <mat-error *ngIf="form.get('name').errors?.required">Please enter a valid username</mat-error>
-      <mat-error *ngIf="form.get('name').errors?.pattern">Please enter a valid username</mat-error>
+      <input
+        id="name"
+        matInput
+        rows="4"
+        formControlName="name"
+        placeholder="Your username"
+      />
+      <mat-error *ngIf="form.get('name').errors?.required"
+        >Please enter a valid username</mat-error
+      >
+      <mat-error *ngIf="form.get('name').errors?.pattern"
+        >Please enter a valid username</mat-error
+      >
     </mat-form-field>
     <mat-form-field>
-      <input id="email" matInput rows="4" formControlName="email" placeholder="Your email" />
-      <mat-error *ngIf="form.get('email').errors?.required">Please enter a valid e-mail address</mat-error>
-      <mat-error *ngIf="form.get('email').errors?.pattern">Please enter a valid e-mail address</mat-error>
+      <input
+        id="email"
+        matInput
+        rows="4"
+        formControlName="email"
+        placeholder="Your email"
+      />
+      <mat-error *ngIf="form.get('email').errors?.required"
+        >Please enter a valid e-mail address</mat-error
+      >
+      <mat-error *ngIf="form.get('email').errors?.pattern"
+        >Please enter a valid e-mail address</mat-error
+      >
     </mat-form-field>
-    <!-- <div>
-          <button class="image-button" mat-stroked-button type="button" (click)="fileInput.click()">Choose
-              Image</button>
-          <input type="file" #fileInput (change)="onImageChange($event)">
-      </div>
-      <div class="imagePreview" *ngIf="imagePreviewUrl !== '' && imagePreviewUrl && form.get('image').valid">
-          <img [src]="imagePreviewUrl" [alt]="form.value.title">
-      </div> -->
-    <!-- <mat-form-field>
-          <input matInput formControlName="content" placeholder="title here" type="text" />
-          <mat-error *ngIf="form.get('content').invalid">error</mat-error>
-      </mat-form-field> -->
-    <div class="clearfix">
+    <div>
+      <button
+        class="image-button"
+        mat-stroked-button
+        type="button"
+        (click)="fileInput.click()"
+      >
+        Choose Image
+      </button>
+      <input type="file" #fileInput (change)="onImageChange($event)" />
     </div>
+    <div
+      class="imagePreview"
+      *ngIf="
+        imagePreviewUrl !== '' && imagePreviewUrl && form.get('image').valid
+      "
+    >
+      <img [src]="imagePreviewUrl" [alt]="form.value.title" />
+    </div>
+    <div class="clearfix"></div>
     <button mat-raised-button color="primary" type="submit">Save</button>
   </form>
 </mat-card>

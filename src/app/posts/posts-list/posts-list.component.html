@@ -1,24 +1,53 @@
 <mat-spinner *ngIf="isLoading"></mat-spinner>
 
-<mat-card multi="true" *ngFor="let post of posts">
+<mat-card multi="true" *ngFor="let post of posts; index as i">
   <mat-card-title>
     {{ post.creatorNickname }}
+    <span class="time-ago">{{ post.date | timeAgo }}</span>
   </mat-card-title>
   <img mat-card-image [src]="post.imagePath" [alt]="post.title" />
   <mat-card-content>
     <p>
       <span>{{ post.creatorNickname }}</span> {{ post.text }}
     </p>
+    <p *ngFor="let comment of post.comments">
+      <span>{{ comment.creatorNickname }}</span> {{ comment.text }}
+    </p>
+    <mat-card-footer *ngIf="isAuthenticated">
+      <input
+        id="comment-input"
+        class="comment-input"
+        type="text"
+        matInput
+        placeholder="Add comment..."
+        [(ngModel)]="commentInput"
+        (keyup)="checkCommentInput($event, i)"
+      />
+      <button
+        mat-button
+        id="post-comment-button"
+        class="post-comment-button"
+        type="button"
+        [disabled]="!commentInputIsValid[i]"
+        (click)="addComment(post.id)"
+      >
+        Post
+      </button>
+    </mat-card-footer>
   </mat-card-content>
-
-  <mat-action-row *ngIf="isAuthenticated && post.creatorId === userId">
-    <button mat-button color="accent" [routerLink]="['/edit', post.id]">
-      EDIT
-    </button>
-    <button mat-button color="warn" (click)="deletePost(post.id)">
-      DELETE
-    </button>
-  </mat-action-row>
+  <mat-card-footer>
+    <mat-card-actions
+      align="end"
+      *ngIf="isAuthenticated && post.creatorId === userId"
+    >
+      <button mat-button color="accent" [routerLink]="['/edit', post.id]">
+        EDIT
+      </button>
+      <button mat-button color="warn" (click)="deletePost(post.id)">
+        DELETE
+      </button>
+    </mat-card-actions>
+  </mat-card-footer>
 </mat-card>
 <mat-paginator
   [length]="totalPosts"

@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { Subscription, Observable } from 'rxjs';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CanComponentDeactivate } from 'src/app/auth/can-deactivate-guard.service';
+import { checkMimeType } from '../../validators/mime-type.validator';
 
 @Component({
   selector: 'app-profile',
@@ -16,6 +17,7 @@ export class ProfileComponent
   authObs: Subscription;
   form: FormGroup;
   isLoading = true;
+  imagePreviewUrl = '';
 
   constructor(private authService: AuthService) {}
 
@@ -36,6 +38,9 @@ export class ProfileComponent
             '[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*'
           )
         ]
+      }),
+      image: new FormControl(null, {
+        // asyncValidators: [checkMimeType]
       })
     });
     this.authObs = this.authService.getAuthObs().subscribe(state => {
@@ -43,7 +48,8 @@ export class ProfileComponent
         this.isLoading = false;
       } else {
         this.user = this.authService.getUser();
-        this.form.setValue({
+        this.imagePreviewUrl = this.user.image;
+        this.form.patchValue({
           name: this.user.name,
           email: this.user.email
         });
@@ -68,7 +74,23 @@ export class ProfileComponent
     }
   }
 
+  onImageChange(event) {
+    const file = (event.target as HTMLInputElement).files[0];
+    this.form.patchValue({ image: file });
+    this.form.get('image').updateValueAndValidity();
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+      this.imagePreviewUrl = fileReader.result as string;
+    };
+    fileReader.readAsDataURL(file);
+  }
+
   saveProfile() {
     console.log('save profile');
+    this.authService.updateUser(
+      this.form.value.name,
+      this.form.value.email,
+      this.form.value.image
+    );
   }
 }

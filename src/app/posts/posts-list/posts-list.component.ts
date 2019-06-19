@@ -21,6 +21,9 @@ export class PostsListComponent implements OnInit, OnDestroy {
   public isAuthenticated = false;
   private authSub: Subscription;
   public userId: string;
+  commentInputIsValid = [];
+  newComment = '';
+  public commentInput = '';
 
   constructor(
     public postsService: PostsService,
@@ -36,6 +39,7 @@ export class PostsListComponent implements OnInit, OnDestroy {
       .subscribe((postData: { posts: Post[]; postCount: number }) => {
         this.isLoading = false;
         this.posts = postData.posts;
+        this.commentInputIsValid = Array(this.posts.length).fill(false);
         this.totalPosts = postData.postCount;
       });
     this.authSub = this.authService.getAuthObs().subscribe(state => {
@@ -68,5 +72,27 @@ export class PostsListComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     console.log('page changed');
     this.postsService.getPosts(pageData.pageSize, pageData.pageIndex + 1);
+  }
+
+  checkCommentInput(event, buttonIndex) {
+    if (event.target.value.length > 0 && event.target.value.trim().length > 0) {
+      this.newComment = event.target.value;
+      this.commentInputIsValid[buttonIndex] = true;
+    } else {
+      this.newComment = '';
+      this.commentInputIsValid[buttonIndex] = false;
+    }
+  }
+
+  addComment(id) {
+    this.postsService.addComment(id, this.newComment, res => {
+      if (res) {
+        this.commentInput = '';
+        for (let i = 0; i < this.commentInputIsValid.length; i++) {
+          this.commentInputIsValid[i] = false;
+        }
+      } else {
+      }
+    });
   }
 }
